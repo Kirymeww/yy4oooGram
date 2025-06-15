@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YY4ooGram Messenger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+        }
+        .users-panel {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chat-panel {
+            flex: 2;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 300px;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #0084ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0073e6;
+        }
+        .user-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .user-list li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+            background: #f0f2f5;
+        }
+        .message .username {
+            font-weight: bold;
+            color: #0084ff;
+        }
+        .system-message {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="users-panel">
+            <h3>Онлайн пользователи</h3>
+            <ul class="user-list" id="userList"></ul>
+        </div>
+        <div class="chat-panel">
+            <div class="chat-area" id="chatArea"></div>
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Введите сообщение...">
+                <button onclick="sendMessage()">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let socket;
+        let username;
+
+        // Запрашиваем URL сервера
+        const serverUrl = prompt('Введите URL сервера (например, https://xxxx.ngrok.io):');
+        if (!serverUrl) {
+            alert('Необходимо указать URL сервера');
+            window.close();
+        }
+
+        // Запрашиваем имя пользователя
+        username = prompt('Введите ваше имя:');
+        if (!username) {
+            alert('Необходимо указать имя пользователя');
+            window.close();
+        }
+
+        // Подключаемся к серверу
+        socket = io(serverUrl);
+
+        socket.on('connect', () => {
+            console.log('Подключено к серверу');
+            socket.emit('register', { username: username });
+        });
+
+        socket.on('disconnect', () => {
+            addSystemMessage('Соединение потеряно');
+        });
+
+        socket.on('user_list', (users) => {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = user;
+                userList.appendChild(li);
+            });
+        });
+
+        socket.on('new_message', (data) => {
+            addMessage(data.username, data.text);
+        });
+
+        socket.on('user_connected', (username) => {
+            addSystemMessage(`${username} подключился`);
+        });
+
+        socket.on('user_disconnected', (username) => {
+            addSystemMessage(`${username} отключился`);
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                socket.emit('message', {
+                    username: username,
+                    text: message,
+                    timestamp: new Date().toISOString()
+                });
+                input.value = '';
+            }
+        }
+
+        function addMessage(username, text) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messageDiv.innerHTML = `<span class="username">${username}:</span> ${text}`;
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function addSystemMessage(text) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'system-message';
+            messageDiv.textContent = text;
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // Отправка сообщения по Enter
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html> 
