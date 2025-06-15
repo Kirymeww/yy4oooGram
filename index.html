@@ -220,7 +220,7 @@
         }
 
         function connect() {
-            const serverUrl = document.getElementById('serverInput').value.trim();
+            let serverUrl = document.getElementById('serverInput').value.trim();
             username = document.getElementById('usernameInput').value.trim();
             
             if (!serverUrl || !username) {
@@ -228,8 +228,26 @@
                 return;
             }
 
+            // Убираем @ если он есть в начале
+            if (serverUrl.startsWith('@')) {
+                serverUrl = serverUrl.substring(1);
+            }
+
+            // Добавляем https:// если его нет
+            if (!serverUrl.startsWith('http://') && !serverUrl.startsWith('https://')) {
+                serverUrl = 'https://' + serverUrl;
+            }
+
             try {
-                socket = io(serverUrl);
+                console.log('Подключаемся к:', serverUrl);
+                socket = io(serverUrl, {
+                    transports: ['websocket'],
+                    path: '/socket.io/',
+                    reconnection: true,
+                    reconnectionAttempts: 5,
+                    reconnectionDelay: 1000,
+                    timeout: 20000
+                });
 
                 socket.on('connect', () => {
                     console.log('Подключено к серверу');
@@ -238,8 +256,13 @@
                 });
 
                 socket.on('connect_error', (error) => {
-                    showError('Ошибка подключения к серверу');
                     console.error('Connection error:', error);
+                    showError('Ошибка подключения к серверу: ' + error.message);
+                });
+
+                socket.on('error', (error) => {
+                    console.error('Socket error:', error);
+                    showError('Ошибка: ' + error);
                 });
 
                 socket.on('disconnect', () => {
@@ -318,7 +341,6 @@
             chatArea.scrollTop = chatArea.scrollHeight;
         }
 
-        // Отправка сообщения по Enter
         document.getElementById('messageInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
