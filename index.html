@@ -22,16 +22,20 @@
         <div class="header">
             <a href="#" class="back-button" onclick="showLoginScreen()">←</a>
             <h2>YY4ooGram</h2>
+            <button class="users-toggle" onclick="toggleUsers()">👥</button>
         </div>
         <div class="chat-container">
-            <div class="users-panel">
+            <div class="users-panel-overlay" id="usersOverlay" onclick="toggleUsers()"></div>
+            <div class="users-panel" id="usersPanel">
                 <h3>Онлайн пользователи</h3>
                 <ul class="user-list" id="userList"></ul>
             </div>
-            <div class="chat-area" id="chatArea"></div>
-            <div class="input-area">
-                <input type="text" id="messageInput" placeholder="Введите сообщение...">
-                <button onclick="sendMessage()">→</button>
+            <div class="main-chat-area">
+                <div class="chat-area" id="chatArea"></div>
+                <div class="input-area">
+                    <input type="text" id="messageInput" placeholder="Введите сообщение...">
+                    <button onclick="sendMessage()">→</button>
+                </div>
             </div>
         </div>
     </div>
@@ -39,6 +43,7 @@
     <script>
         let socket;
         let username;
+        let currentServerUrl;
 
         function showLoginScreen() {
             document.getElementById('loginScreen').style.display = 'flex';
@@ -51,6 +56,30 @@
         function showChatScreen() {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('chatScreen').style.display = 'flex';
+            loadMessageHistory();
+        }
+
+        function saveMessageToHistory(message) {
+            const history = JSON.parse(localStorage.getItem(`chat_history_${currentServerUrl}`) || '[]');
+            history.push(message);
+            if (history.length > 100) {
+                history.shift();
+            }
+            localStorage.setItem(`chat_history_${currentServerUrl}`, JSON.stringify(history));
+        }
+
+        function loadMessageHistory() {
+            const history = JSON.parse(localStorage.getItem(`chat_history_${currentServerUrl}`) || '[]');
+            const chatArea = document.getElementById('chatArea');
+            chatArea.innerHTML = '';
+            
+            history.forEach(msg => {
+                if (msg.type === 'system') {
+                    addSystemMessage(msg.text);
+                } else {
+                    addMessage(msg.username, msg.text, msg.username === username);
+                }
+            });
         }
 
         function connect() {
@@ -62,15 +91,15 @@
                 return;
             }
 
-            // Убираем @ если он есть в начале
             if (serverUrl.startsWith('@')) {
                 serverUrl = serverUrl.substring(1);
             }
 
-            // Добавляем https:// если его нет
             if (!serverUrl.startsWith('http://') && !serverUrl.startsWith('https://')) {
                 serverUrl = 'https://' + serverUrl;
             }
+
+            currentServerUrl = serverUrl;
 
             try {
                 console.log('Подключаемся к:', serverUrl);
@@ -87,6 +116,17 @@
                     console.log('Подключено к серверу');
                     socket.emit('register', { username: username });
                     showChatScreen();
+                });
+
+                socket.on('message_history', (history) => {
+                    history.forEach(msg => {
+                        if (msg.type === 'system') {
+                            addSystemMessage(msg.text);
+                        } else {
+                            addMessage(msg.username, msg.text, msg.username === username);
+                        }
+                        saveMessageToHistory(msg);
+                    });
                 });
 
                 socket.on('connect_error', (error) => {
@@ -114,15 +154,32 @@
                 });
 
                 socket.on('new_message', (data) => {
+                    const message = {
+                        type: 'message',
+                        username: data.username,
+                        text: data.text,
+                        timestamp: data.timestamp
+                    };
                     addMessage(data.username, data.text, data.username === username);
+                    saveMessageToHistory(message);
                 });
 
                 socket.on('user_connected', (username) => {
-                    addSystemMessage(`${username} подключился`);
+                    const message = {
+                        type: 'system',
+                        text: `${username} подключился`
+                    };
+                    addSystemMessage(message.text);
+                    saveMessageToHistory(message);
                 });
 
                 socket.on('user_disconnected', (username) => {
-                    addSystemMessage(`${username} отключился`);
+                    const message = {
+                        type: 'system',
+                        text: `${username} отключился`
+                    };
+                    addSystemMessage(message.text);
+                    saveMessageToHistory(message);
                 });
 
             } catch (error) {
@@ -175,7 +232,13 @@
             chatArea.scrollTop = chatArea.scrollHeight;
         }
 
-        // Отправка сообщения по Enter
+        function toggleUsers() {
+            const usersPanel = document.getElementById('usersPanel');
+            const usersOverlay = document.getElementById('usersOverlay');
+            usersPanel.classList.toggle('active');
+            usersOverlay.classList.toggle('active');
+        }
+
         document.getElementById('messageInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
