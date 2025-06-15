@@ -5,102 +5,199 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
             background: #f0f2f5;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            gap: 20px;
-        }
-        .users-panel {
-            flex: 1;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .chat-panel {
-            flex: 2;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: 100vh;
             display: flex;
             flex-direction: column;
         }
+
+        .login-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+            background: white;
+        }
+
+        .chat-screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            background: #0084ff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            gap: 15px;
+        }
+
+        .users-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
         .chat-area {
             flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
             overflow-y: auto;
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            min-height: 300px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .input-area {
             display: flex;
             gap: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         input[type="text"] {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 20px;
+            font-size: 16px;
         }
+
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background: #0084ff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 20px;
             cursor: pointer;
+            font-size: 16px;
         }
+
         button:hover {
             background: #0073e6;
         }
+
         .user-list {
             list-style: none;
-            padding: 0;
-            margin: 0;
         }
+
         .user-list li {
-            padding: 8px;
+            padding: 10px;
             border-bottom: 1px solid #eee;
         }
+
         .message {
             margin: 5px 0;
-            padding: 8px;
-            border-radius: 5px;
-            background: #f0f2f5;
+            padding: 10px;
+            border-radius: 15px;
+            max-width: 80%;
         }
-        .message .username {
-            font-weight: bold;
+
+        .message.sent {
+            background: #0084ff;
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.received {
+            background: #f0f2f5;
+            margin-right: auto;
+        }
+
+        .system-message {
+            text-align: center;
+            color: #666;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .login-form input {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .login-form button {
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
             color: #0084ff;
         }
-        .system-message {
-            color: #666;
-            font-style: italic;
+
+        .error-message {
+            color: red;
             text-align: center;
-            margin: 10px 0;
+            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="users-panel">
-            <h3>Онлайн пользователи</h3>
-            <ul class="user-list" id="userList"></ul>
+    <div class="login-screen" id="loginScreen">
+        <h1>YY4ooGram</h1>
+        <div class="login-form">
+            <input type="text" id="serverInput" placeholder="Введите URL сервера (например, https://xxxx.ngrok.io)">
+            <input type="text" id="usernameInput" placeholder="Введите ваше имя">
+            <button onclick="connect()">Войти</button>
+            <div class="error-message" id="errorMessage"></div>
         </div>
-        <div class="chat-panel">
+    </div>
+
+    <div class="chat-screen" id="chatScreen">
+        <div class="header">
+            <a href="#" class="back-button" onclick="showLoginScreen()">←</a>
+            <h2>YY4ooGram</h2>
+        </div>
+        <div class="chat-container">
+            <div class="users-panel">
+                <h3>Онлайн пользователи</h3>
+                <ul class="user-list" id="userList"></ul>
+            </div>
             <div class="chat-area" id="chatArea"></div>
             <div class="input-area">
                 <input type="text" id="messageInput" placeholder="Введите сообщение...">
-                <button onclick="sendMessage()">Отправить</button>
+                <button onclick="sendMessage()">→</button>
             </div>
         </div>
     </div>
@@ -109,59 +206,88 @@
         let socket;
         let username;
 
-        // Запрашиваем URL сервера
-        const serverUrl = prompt('Введите URL сервера (например, https://xxxx.ngrok.io):');
-        if (!serverUrl) {
-            alert('Необходимо указать URL сервера');
-            window.close();
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('chatScreen').style.display = 'none';
+            if (socket) {
+                socket.disconnect();
+            }
         }
 
-        // Запрашиваем имя пользователя
-        username = prompt('Введите ваше имя:');
-        if (!username) {
-            alert('Необходимо указать имя пользователя');
-            window.close();
+        function showChatScreen() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('chatScreen').style.display = 'flex';
         }
 
-        // Подключаемся к серверу
-        socket = io(serverUrl);
+        function connect() {
+            const serverUrl = document.getElementById('serverInput').value.trim();
+            username = document.getElementById('usernameInput').value.trim();
+            
+            if (!serverUrl || !username) {
+                showError('Пожалуйста, заполните все поля');
+                return;
+            }
 
-        socket.on('connect', () => {
-            console.log('Подключено к серверу');
-            socket.emit('register', { username: username });
-        });
+            try {
+                socket = io(serverUrl);
 
-        socket.on('disconnect', () => {
-            addSystemMessage('Соединение потеряно');
-        });
+                socket.on('connect', () => {
+                    console.log('Подключено к серверу');
+                    socket.emit('register', { username: username });
+                    showChatScreen();
+                });
 
-        socket.on('user_list', (users) => {
-            const userList = document.getElementById('userList');
-            userList.innerHTML = '';
-            users.forEach(user => {
-                const li = document.createElement('li');
-                li.textContent = user;
-                userList.appendChild(li);
-            });
-        });
+                socket.on('connect_error', (error) => {
+                    showError('Ошибка подключения к серверу');
+                    console.error('Connection error:', error);
+                });
 
-        socket.on('new_message', (data) => {
-            addMessage(data.username, data.text);
-        });
+                socket.on('disconnect', () => {
+                    addSystemMessage('Соединение потеряно');
+                });
 
-        socket.on('user_connected', (username) => {
-            addSystemMessage(`${username} подключился`);
-        });
+                socket.on('user_list', (users) => {
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = '';
+                    users.forEach(user => {
+                        const li = document.createElement('li');
+                        li.textContent = user;
+                        userList.appendChild(li);
+                    });
+                });
 
-        socket.on('user_disconnected', (username) => {
-            addSystemMessage(`${username} отключился`);
-        });
+                socket.on('new_message', (data) => {
+                    addMessage(data.username, data.text, data.username === username);
+                });
+
+                socket.on('user_connected', (username) => {
+                    addSystemMessage(`${username} подключился`);
+                });
+
+                socket.on('user_disconnected', (username) => {
+                    addSystemMessage(`${username} отключился`);
+                });
+
+            } catch (error) {
+                showError('Ошибка подключения');
+                console.error('Connection error:', error);
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
 
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
             
-            if (message) {
+            if (message && socket) {
                 socket.emit('message', {
                     username: username,
                     text: message,
@@ -171,11 +297,14 @@
             }
         }
 
-        function addMessage(username, text) {
+        function addMessage(username, text, isSent) {
             const chatArea = document.getElementById('chatArea');
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'message';
-            messageDiv.innerHTML = `<span class="username">${username}:</span> ${text}`;
+            messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+            if (!isSent) {
+                messageDiv.innerHTML = `<strong>${username}:</strong> `;
+            }
+            messageDiv.appendChild(document.createTextNode(text));
             chatArea.appendChild(messageDiv);
             chatArea.scrollTop = chatArea.scrollHeight;
         }
