@@ -140,6 +140,25 @@ body {
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
 }
 
+/* Mobile users toggle button */
+.users-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
 .header {
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
@@ -186,6 +205,13 @@ body {
     display: flex;
     flex: 1;
     overflow: hidden;
+    flex-direction: row;
+}
+
+.main-chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .users-panel {
@@ -380,12 +406,52 @@ body {
 
 /* Responsive design */
 @media (max-width: 768px) {
+    .users-toggle {
+        display: block;
+    }
+    
+    .users-toggle:hover {
+        transform: scale(1.1);
+        background: linear-gradient(135deg, #5a5a5a 0%, #3a3a3a 100%);
+    }
+    
     .users-panel {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        height: 100vh;
+        width: 280px;
+        z-index: 999;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .users-panel.active {
+        left: 0;
+    }
+    
+    .users-panel-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
         display: none;
+        backdrop-filter: blur(5px);
+    }
+    
+    .users-panel-overlay.active {
+        display: block;
     }
     
     .chat-container {
         flex-direction: column;
+    }
+    
+    .main-chat-area {
+        width: 100%;
     }
     
     .login-form {
@@ -400,6 +466,17 @@ body {
     
     .message {
         max-width: 85%;
+    }
+}
+
+@media (min-width: 769px) {
+    .chat-container {
+        flex-direction: row;
+    }
+    
+    .users-panel {
+        position: relative;
+        left: 0;
     }
 }
 
