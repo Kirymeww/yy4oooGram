@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>yy4oooGram Web</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" type="image/png" href="Images/frame.png" />
+<script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+</head>
+<body>
+  <div id="toastContainer"></div>
+  <div id="loginWrapper">
+    <div id="login" class="centered">
+      <h2>
+        <img src="Images/frame.png" alt="icon" class="login-icon" />
+        <span>yy4oooGram</span>
+      </h2>
+      <input id="tunnelInput" type="text" placeholder="Ngrok URL (https://...)" autocomplete="off" />
+      <input id="nickInput" type="text" placeholder="Введите ник" autocomplete="off" />
+      <button id="enterBtn">Войти</button>
+      <div id="version" style="color:#b96bfa; font-size:11px; text-align:center; margin:2px 0 0 0; opacity:0.5; letter-spacing:0.5px;">Версия: v0.0.3</div>
+      <div class="login-info">
+        <p style="font-size:13px; color:#b96bfa; margin: 0;">
+          Автор: <a href="https://t.me/yy4ooo" target="_blank" style="color:#b96bfa; text-decoration:underline;">@yy4ooo</a>
+        </p>
+      </div>
+      <div id="loginError" class="error"></div>
+    </div>
+  </div>
+
+  <div id="chatDragWrapper">
+    <div id="chatWrapper" class="hidden">
+      <header>
+        <div class="header-content">
+          <img src="Images/frame.png" alt="group" class="header-icon" />
+          <span>Группа</span>
+        </div>
+      </header>
+      <div id="messages"></div>
+      <div id="inputArea">
+        <input id="messageInput" type="text" placeholder="Введите сообщение..." autocomplete="off" />
+        <button id="sendBtn" class="send-button">
+          <img src="Images/send.png" alt="send" class="send-icon" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="drag.js"></script>
+</body>
+</html>
