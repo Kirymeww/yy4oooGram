@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>yy4oooGram Web</title>
+  
+  <link rel="icon" type="image/png" href="public/Images/web.png" style="filter: invert(1);">
+  <link rel="apple-touch-icon" href="public/Images/web.png" style="filter: invert(1);">
+  
+  <link rel="stylesheet" href="public/css/normalize.css">
+  <link rel="stylesheet" href="public/css/styles.module.css">
+  <link rel="stylesheet" href="public/css/themes.module.css">
+  <link rel="stylesheet" href="public/css/mobile.css">
+  
+  <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+</head>
+<body>
+  <div id="modal-overlay" class="modal-overlay"></div>
+  <div id="confirm-action-modal" class="confirm-modal">
+    <h3 id="confirm-title">Подтвердите действие</h3>
+    <p id="confirm-message">Пожалуйста, заполните все обязательные поля</p>
+    <div class="confirm-actions">
+      <button id="cancel-action" class="confirm-button">Отмена</button>
+      <button id="confirm-action" class="confirm-button primary">OK</button>
+    </div>
+  </div>
+  
+  <div id="admin-confirm-modal" class="confirm-modal">
+    <h3 id="admin-confirm-title">Вход для администратора</h3>
+    <p id="admin-confirm-message">Для входа под этим именем требуется пароль администратора.</p>
+    <div class="formGroup">
+      <input type="password" id="admin-password-input" class="formInput" placeholder="Введите пароль" autocomplete="current-password">
+    </div>
+    <div class="confirm-actions">
+      <button id="admin-cancel-action" class="confirm-button">Отмена</button>
+      <button id="admin-confirm-action" class="confirm-button primary">Войти</button>
+    </div>
+  </div>
+  
+  <div id="settings-modal" class="confirm-modal">
+    <h3 id="settings-title">Настройки</h3>
+    <div class="formGroup">
+      <label class="formLabel">Тема оформления</label>
+      <div class="custom-select-wrapper">
+        <div id="custom-select" class="custom-select">
+          <div id="custom-select-trigger" class="custom-select__trigger">
+            <span>🌌 Магический космос</span>
+            <div class="arrow"></div>
+          </div>
+          <div id="custom-options" class="custom-options">
+              <div class="custom-option" data-value="cosmic-magic">🟣 Магический космос</div>
+              <div class="custom-option" data-value="blood-moon">🔴 Кровавая луна</div>
+              <div class="custom-option" data-value="sakura-dream">🩷 Розовая сакура</div>
+              <div class="custom-option" data-value="golden-fever">🟡 Золотое солнце</div>
+              <div class="custom-option" data-value="neon-nights">🟠 Неоновый закат</div>
+              <div class="custom-option" data-value="mint-chill">🟢 Мятный лес</div>
+              <div class="custom-option" data-value="ocean-depths">🔵 Глубокий океан</div>
+              <div class="custom-option" data-value="cyan-wave">🩵 Голубая волна</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="confirm-actions">
+      <button id="settings-close-button" class="confirm-button primary">Закрыть</button>
+    </div>
+  </div>
+  
+  <div id="login-form" class="loginForm">
+    <div class="formHeader">
+      <div class="appIcon"></div>
+      <div class="title-container">
+        <h2 class="formTitle">yy4oooGram</h2>
+        <p class="subtitle">Экспериментальный веб-мессенджер</p>
+      </div>
+    </div>
+    
+    <form>
+      <div class="formGroup">
+        <label class="formLabel" for="username-input">Имя</label>
+        <input type="text" id="username-input" class="formInput" placeholder="Введите ваше имя" autocomplete="off">
+      </div>
+      
+      <div id="tunnel-input-group" class="formGroup">
+        <label class="formLabel" for="tunnel-url">Сервер</label>
+        <input type="text" id="tunnel-url" class="formInput" placeholder="https://####-####.ngrok-free.app" autocomplete="off">
+      </div>
+      
+      <button type="button" id="settings-button" class="settings-button-footer" style="margin-bottom: 10px;">Настройки</button>
+      <button type="submit" id="login-button" class="submitButton">Войти</button>
+      
+      <div class="version-info">Версия 0.0.5</div>
+      
+      <div class="dev-info">
+        <span class="lead-dev">Авторы: @yy4ooo</span> 
+        <span class="other-dev">@yurii_fisting @lovely</span>
+      </div>
+    </form>
+  </div>
+  
+  <div id="chat-container" class="container" style="display: none;">
+    <div class="mainLayout">
+      <div class="sidebar">
+        <div class="sidebarHeader">
+          <div class="headerContent">
+            <span>Участники чата</span>
+          </div>
+        </div>
+        
+        <div class="usersList">
+        </div>
+      </div>
+      
+      <div class="chatArea">
+        <div class="chatHeader">
+          <div class="chatHeaderGroupInfo">
+            <div class="groupIcon"></div>
+            <span id="group-name">Группа</span>
+          </div>
+          <div class="chatHeaderUserInfo">
+            <img id="current-user-avatar" src="public/Images/user.png" alt="User" class="userAvatar">
+            <span id="current-user-name">Никнейм</span>
+          </div>
+        </div>
+        
+        <div class="messagesContainer">
+        </div>
+        
+        <div id="typing-indicator" class="typingIndicator"></div>
+        
+        <div class="inputArea">
+          <textarea id="message-input" class="messageInput" placeholder="Введите сообщение..."></textarea>
+          <button id="send-button" class="sendButton">
+            <img src="public/Images/send.png" alt="Send" class="sendIcon">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="public/js/main.js"></script>
+  <script src="public/js/socket.js"></script>
+  <script src="public/js/mobile.js"></script>
+</body>
+</html> 
