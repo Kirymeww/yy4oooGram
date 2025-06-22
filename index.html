@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>yy4oooGram Web</title>
+  
+  <link rel="icon" type="image/png" href="public/Images/frame.png">
+  <link rel="apple-touch-icon" href="public/Images/frame.png">
+  
+  <link rel="stylesheet" href="public/css/normalize.css">
+  <link rel="stylesheet" href="public/css/styles.module.css">
+  <link rel="stylesheet" href="public/css/themes.module.css">
+  <link rel="stylesheet" href="public/css/mobile.css">
+  
+  <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+</head>
+<body>
+  <div id="modal-overlay" class="modal-overlay"></div>
+  <div id="confirm-action-modal" class="confirm-modal">
+    <h3 id="confirm-title">Подтвердите действие</h3>
+    <p id="confirm-message">Пожалуйста, заполните все обязательные поля</p>
+    <div class="confirm-actions">
+      <button id="cancel-action" class="confirm-button">Отмена</button>
+      <button id="confirm-action" class="confirm-button primary">OK</button>
+    </div>
+  </div>
+  
+  <div id="login-form" class="loginForm">
+    <div class="formHeader">
+      <img src="public/Images/frame.png" alt="yy4oooGram" class="appIcon">
+      <div class="title-container">
+        <h2 class="formTitle">yy4oooGram</h2>
+        <p class="subtitle">Экспериментальный веб-мессенджер</p>
+      </div>
+    </div>
+    
+    <form>
+      <div class="formGroup">
+        <label class="formLabel" for="username-input">Имя</label>
+        <input type="text" id="username-input" class="formInput" placeholder="Введите ваше имя" autocomplete="off">
+      </div>
+      
+      <div id="tunnel-input-group" class="formGroup">
+        <label class="formLabel" for="tunnel-url">Сервер</label>
+        <input type="text" id="tunnel-url" class="formInput" placeholder="https://####-####.ngrok-free.app" autocomplete="off">
+      </div>
+      
+      <button type="submit" id="login-button" class="submitButton">Войти</button>
+      
+      <div class="version-info">Версия 0.0.42</div>
+      <div class="dev-info">
+        <span class="lead-dev">Авторы: @yy4ooo</span> 
+        <span class="other-dev">@yurii_fisting @lovely</span>
+      </div>
+    </form>
+  </div>
+  
+  <div id="chat-container" class="container" style="display: none;">
+    <div class="mainLayout">
+      <div class="sidebar">
+        <div class="sidebarHeader">
+          <div class="headerContent">
+            <span>Участники чата</span>
+          </div>
+        </div>
+        
+        <div class="usersList">
+        </div>
+      </div>
+      
+      <div class="chatArea">
+        <div class="chatHeader">
+          <div class="chatHeaderUserInfo">
+            <img id="current-user-avatar" src="public/Images/user.png" alt="User" class="userAvatar">
+            <span id="current-user-name">Никнейм</span>
+          </div>
+        </div>
+        
+        <div class="messagesContainer">
+        </div>
+        
+        <div id="typing-indicator" class="typingIndicator"></div>
+        
+        <div class="inputArea">
+          <textarea id="message-input" class="messageInput" placeholder="Введите сообщение..."></textarea>
+          <button id="send-button" class="sendButton">
+            <img src="public/Images/send.png" alt="Send" class="sendIcon">
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="public/js/main.js"></script>
+  <script src="public/js/socket.js"></script>
+  <script src="public/js/mobile.js"></script>
+</body>
+</html> 
