@@ -1,0 +1,227 @@
+[data-theme='cosmic-magic'] {
+  --primary-color: #9c27b0;
+  --accent-color-rgb: 186, 104, 200;
+  --secondary-color: #3a2840;
+  --accent-color: #ba68c8;
+  --dark-accent: #7b1fa2;
+  --light-accent: #d1c4e9;
+  --text-color: #e2e8f0;
+  --text-secondary: #c4b8d3;
+  --background-color: #1a1022;
+  --card-background: #2d1f35;
+  --border-color: #4a3158;
+  --shadow: 0 4px 8px rgba(186, 104, 200, 0.25);
+  --notification-bg: #2d1f35;
+  --gradient-bg: linear-gradient(135deg, #121212, #1a1022);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+ 
+ [data-theme='blood-moon'] {
+  --primary-color: #f44336;
+  --accent-color-rgb: 239, 83, 80;
+  --secondary-color: #4a1e1e;
+  --accent-color: #ef5350;
+  --dark-accent: #b71c1c;
+  --light-accent: #ffcdd2;
+  --text-color: #ffebee;
+  --text-secondary: #d4b8b8;
+  --background-color: #1f0d0d;
+  --card-background: #2f1a1a;
+  --border-color: #5a2e2e;
+  --shadow: 0 4px 8px rgba(239, 83, 80, 0.25);
+  --notification-bg: #2f1a1a;
+  --gradient-bg: linear-gradient(135deg, #1a0f0f, #1f0d0d);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+ 
+ [data-theme='sakura-dream'] {
+  --primary-color: #e91e63;
+  --accent-color-rgb: 240, 98, 146;
+  --secondary-color: #4a1e3a;
+  --accent-color: #f06292;
+  --dark-accent: #ad1457;
+  --light-accent: #f8bbd9;
+  --text-color: #fce4ec;
+  --text-secondary: #d4b8c8;
+  --background-color: #1f0d1a;
+  --card-background: #2f1a29;
+  --border-color: #5a2e4a;
+  --shadow: 0 4px 8px rgba(240, 98, 146, 0.25);
+  --notification-bg: #2f1a29;
+  --gradient-bg: linear-gradient(135deg, #1a0f16, #1f0d1a);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+ 
+ [data-theme='golden-fever'] {
+  --primary-color: #ffc107;
+  --accent-color-rgb: 255, 213, 79;
+  --secondary-color: #4a3e1e;
+  --accent-color: #ffd54f;
+  --dark-accent: #f57f17;
+  --light-accent: #fff9c4;
+  --text-color: #fffde7;
+  --text-secondary: #d4cc96;
+  --background-color: #1f1c0d;
+  --card-background: #2f2a1a;
+  --border-color: #5a4e2e;
+  --shadow: 0 4px 8px rgba(255, 213, 79, 0.25);
+  --notification-bg: #2f2a1a;
+  --gradient-bg: linear-gradient(135deg, #1a180f, #1f1c0d);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+ 
+ [data-theme='neon-nights'] {
+  --primary-color: #ff9800;
+  --accent-color-rgb: 255, 183, 77;
+  --secondary-color: #4a2e1e;
+  --accent-color: #ffb74d;
+  --dark-accent: #e65100;
+  --light-accent: #ffe0b2;
+  --text-color: #fff3e0;
+  --text-secondary: #d4c096;
+  --background-color: #1f140d;
+  --card-background: #2f231a;
+  --border-color: #5a3e2e;
+  --shadow: 0 4px 8px rgba(255, 183, 77, 0.25);
+  --notification-bg: #2f231a;
+  --gradient-bg: linear-gradient(135deg, #1a130f, #1f140d);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+ 
+ [data-theme='mint-chill'] {
+  --primary-color: #26a69a;
+  --accent-color-rgb: 77, 182, 172;
+  --secondary-color: #1e3a37;
+  --accent-color: #4db6ac;
+  --dark-accent: #00695c;
+  --light-accent: #b2dfdb;
+  --text-color: #e0f2f1;
+  --text-secondary: #b8d4d1;
+  --background-color: #0d1f1c;
+  --card-background: #1a2f2c;
+  --border-color: #2e4a46;
+  --shadow: 0 4px 8px rgba(77, 182, 172, 0.25);
+  --notification-bg: #1a2f2c;
+  --gradient-bg: linear-gradient(135deg, #0f1b19, #0d1f1c);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+ 
+ [data-theme='ocean-depths'] {
+  --primary-color: #2196f3;
+  --accent-color-rgb: 100, 181, 246;
+  --secondary-color: #1e3a5f;
+  --accent-color: #64b5f6;
+  --dark-accent: #0d47a1;
+  --light-accent: #bbdefb;
+  --text-color: #e3f2fd;
+  --text-secondary: #b8d4f0;
+  --background-color: #0a1929;
+  --card-background: #1a2332;
+  --border-color: #2e3f5a;
+  --shadow: 0 4px 8px rgba(100, 181, 246, 0.25);
+  --notification-bg: #1a2332;
+  --gradient-bg: linear-gradient(135deg, #0f1419, #0a1929);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+ 
+ [data-theme='cyan-wave'] {
+  --primary-color: #00bcd4;
+  --accent-color-rgb: 77, 208, 225;
+  --secondary-color: #1e3d42;
+  --accent-color: #4dd0e1;
+  --dark-accent: #006064;
+  --light-accent: #b2ebf2;
+  --text-color: #e0f7fa;
+  --text-secondary: #b8d9dd;
+  --background-color: #0d1f22;
+  --card-background: #1a2f33;
+  --border-color: #2e4a4f;
+  --shadow: 0 4px 8px rgba(77, 208, 225, 0.25);
+  --notification-bg: #1a2f33;
+  --gradient-bg: linear-gradient(135deg, #0f1b1d, #0d1f22);
+  --button-gradient: linear-gradient(135deg, var(--primary-color), var(--dark-accent));
+ }
+
+.notification {
+  background-color: var(--notification-bg);
+  color: var(--text-secondary);
+  border-left: 3px solid var(--accent-color);
+}
+
+.modal-content {
+  background-color: var(--card-background);
+  color: var(--text-color);
+  border: 1px solid var(--accent-color);
+}
+
+.close-modal {
+  color: #c4b8d3;
+}
+
+.close-modal:hover {
+  color: white;
+}
+
+code {
+  background-color: #3a2840;
+  color: #e0d2f5;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1022;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4a3158;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+.errorOverlay {
+  background-color: rgba(26, 16, 34, 0.95);
+}
+
+.errorMessage {
+  background-color: #2d1f35;
+  color: var(--text-color);
+  border-left: 4px solid var(--accent-color);
+}
+
+.formInput {
+  background-color: var(--card-background);
+  color: #fff;
+  border: 1px solid var(--border-color);
+}
+
+.formInput::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.formInput:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3);
+}
+
+.formLabel {
+  color: var(--light-accent);
+}
+
+.avatarOption:hover {
+  border-color: var(--accent-color);
+  transform: scale(1.05);
+}
+
+.selectedAvatar, .avatar-option.selected {
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 0 10px rgba(var(--accent-color-rgb), 0.5);
+} 
